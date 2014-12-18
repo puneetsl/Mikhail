@@ -1,0 +1,46 @@
+This document describes Kile's DBUS interface and the parts of the Lyx protocol known by Kile.
+
+1. Kile's DBUS interface
+
+Open a file either by absolute or relative path:
+	virtual void openDocument(const QString &);
+
+Insert text at the cursor position in the current document; this can be used to replace Lyx's pipe mechanism:
+	virtual void insertText(const QString &);
+
+Close the current document:
+	virtual void closeDocument();
+
+Open a Kile project file, either by absolute or relative path:
+	virtual void openProject(const QString &);
+
+Jump to the given line in the current document; please note that the parameter is not of the type 'int' but of 'QString' instead:
+	virtual void setLine(const QString &);
+
+Raise Kile's main window; does not steal the focus:
+	virtual void setActive();
+
+Run the given tool; the return values are { Running = 0, ConfigureFailed, NoLauncherInstalled, NoValidTarget, NoValidSource, TargetHasWrongPermissions, NoValidPrereqs, CouldNotLaunch, SelfCheckFailed}:
+	virtual int run(const QString &);
+
+Run the given tool with a specific configuration as second parameter; returns the same values as the function above:
+	virtual int runWith(const QString &, const QString &);
+
+
+2. Kile's Lyx Pipe emulation
+
+The following Lyx commands are understood by Kile.
+
+Insert the citations $Name1, Name2, ... at the current cursor postion; the citation command is hard coded to '\cite':
+	:citation-insert:$Name1,$Name2
+
+Insert the command \bibliography with the files named $myBib1, $myBib2, ... at the current cursor position:
+	:bibtex-database-add:$myBib
+
+Insert the string $text at the current cursor position:
+	:paste:$text
+
+Valid for Kile 2.1, written at 6/9/2009
+
+The Kile Development Team
+
